@@ -37,12 +37,12 @@ class ActorManager:
             Actor(*row) for row in cursor
         ]
 
-    def update(self, pk: int, first_name: str, last_name: str) -> None:
+    def update(self, pk: int, new_first_name: str, new_last_name: str) -> None:
         self._connection.execute(
             f"UPDATE {self.table_name} "
             f"SET first_name = ?, last_name = ? "
             f"WHERE id = ?",
-            (first_name, last_name, pk),
+            (new_first_name, new_last_name, pk),
         )
         self._connection.commit()
 
