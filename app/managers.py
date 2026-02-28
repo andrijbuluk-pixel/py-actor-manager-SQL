@@ -1,12 +1,13 @@
 import sqlite3
+from typing import List
 
 from app.models import Actor
 
 
 class ActorManager:
-    def __init__(self) -> None:
-        self._connection = sqlite3.connect("./data/actors.db")
-        self.table_name = "actors"
+    def __init__(self, db_name: str, table_name: str) -> None:
+        self._connection = sqlite3.connect(db_name)
+        self.table_name = table_name
 
         self._connection.execute(
             f"CREATE TABLE IF NOT EXISTS {self.table_name} ("
@@ -25,8 +26,9 @@ class ActorManager:
         )
         self._connection.commit()
 
-    def all(self) -> None:
-        cursor = self._connection.execute(
+    def all(self) -> List[Actor]:
+        cursor = self._connection.cursor()
+        cursor.execute(
             f"SELECT * FROM {self.table_name}"
         )
 
@@ -36,7 +38,7 @@ class ActorManager:
 
     def update(self, pk: str, first_name: str, last_name: str) -> None:
         self._connection.execute(
-            f"UPDATR {self.table_name} "
+            f"UPDATE {self.table_name} "
             f"SET {first_name}, {last_name} = ? "
             f"WHERE {pk} = ? ",
             (pk, first_name, last_name),
